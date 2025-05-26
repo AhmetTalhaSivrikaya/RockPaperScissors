@@ -1,0 +1,114 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <locale.h>
+
+#ifdef _WIN32
+#define EKRAN_TEMIZLE "cls" 
+#endif
+
+using namespace std;
+
+class Otomasyon {
+public:
+	bool kazanmaDurum = 0;
+	int Pcsayac = 0;
+	int Oyuncusayac = 0;
+	Otomasyon() {
+		showmenu();
+	}
+	void showmenu();
+	void Ooyun();
+};
+
+void Otomasyon::showmenu() {
+	int secim;
+	cout << "......Oyuna Hoşgeldiniz......" << endl;
+	cout << "1.Oyuna Başla" << endl;
+	cout << "2.Çıkış\n";
+	cin >> secim;
+	while (cin.fail() || (secim != 1 && secim != 2)) {
+		cin.clear();  // hatalı girdi durumunu temizler
+		cin.ignore(1000, '\n');  // girilen hatalı karakterleri yok sayar
+		cout << "Hatalı giriş yaptınız tekrar seçiniz: ";
+		cin >> secim;
+	}
+	switch (secim) {
+	case 1: Ooyun();
+		break;
+	case 2:
+		break;
+	}
+}
+
+void Otomasyon::Ooyun() {
+	int OyuncuHamle;
+	int PChamle;
+	
+	do {
+		//system(EKRAN_TEMIZLE);
+
+		cout << "Hamlenizi Giriniz: (0-T,1-K,2-M,3-Çıkış): ";
+		cin >> OyuncuHamle;
+
+		while (cin.fail() || (OyuncuHamle < 0 || OyuncuHamle > 3)) {
+			cin.ignore(1000, '\n');  
+			cout << "Hatalı giriş yaptınız. Lütfen tekrar deneyin: ";
+			cin >> OyuncuHamle;
+		}
+
+		if (OyuncuHamle == 3) {
+			cout << "Oyundan Çıkılıyor..." << endl;
+			break;
+		}
+
+		srand(time(0));
+		PChamle = rand() % 3;
+
+		if (PChamle == 0) {
+			cout << "Bilgisayarın Hamlesi: TAŞ" << endl;
+		}
+		else if (PChamle == 1) {
+			cout << "Bilgisayarın Hamlesi: KAĞIT" << endl;
+		}
+		else if (PChamle == 2) {
+			cout << "Bilgisayarın Hamlesi: MAKAS" << endl;
+		}
+
+		if (OyuncuHamle == 0) {
+			cout << "Hamleniz: TAŞ" << endl;
+		}
+		else if (OyuncuHamle == 1) {
+			cout << "Hamleniz: KAĞIT" << endl;
+		}
+		else if (OyuncuHamle == 2) {
+			cout << "Hamleniz: MAKAS" << endl;
+		}
+
+		// Kazanma kontrolü
+		if (OyuncuHamle == PChamle) {
+			cout << "Berabere!" << endl;
+			cout << "Bilgisayar " << Pcsayac << "-" << Oyuncusayac << " Oyuncu\n" << endl;
+		}
+		else if (OyuncuHamle == 0 && PChamle == 2 || OyuncuHamle == 1 && PChamle == 0 || OyuncuHamle == 2 && PChamle == 1) {
+			cout << "Oyuncu Kazandı!\n" << endl;
+			Oyuncusayac += 1;
+			cout << "Bilgisayar " << Pcsayac << "-" << Oyuncusayac << " Oyuncu\n" << endl;
+		}
+		else {
+			cout << "PC Kazandı!\n" << endl;
+			Pcsayac += 1;
+			cout << "Bilgisayar " << Pcsayac << "-" << Oyuncusayac << " Oyuncu\n" << endl;
+		}
+		
+	} while (kazanmaDurum == 0);
+}
+
+int main() {
+	setlocale(LC_ALL, "Turkish");
+	Otomasyon obj;
+
+	return 0;
+}
+
+
